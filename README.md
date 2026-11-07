@@ -42,5 +42,5 @@ sentiment-app/
 
 | Rôle | Nom | Identifiant GitHub | Travail de la semaine 1 |
 | --- | --- | --- | --- |
-| Membre A | [Nom 1] | [@login] | |
-| Membre B | [Nom 2] | [@login] | |
+| Membre A | aymenabouzya | [@aymenabouzya](https://github.com/aymenabouzya) | Cadrage, environnement et structure initiale du dépôt |
+| Membre B | Yassine benkassou | yassinebenkassou17@gmail.com | Vérification du dépôt et contributions TP1 |
