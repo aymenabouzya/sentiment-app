@@ -41,7 +41,7 @@ def test_interface_abstention(monkeypatch):
     page, session = executer(monkeypatch)
     page.text_area[0].input("xqzvb wlkptr grombu")
     page.button[0].click().run(timeout=30)
-    assert page.metric[0].label.startswith("Je ne sais pas")
+    assert page.metric[0].label == "Je ne sais pas"
     assert len(page.info) >= 1
     session.__exit__(None, None, None)
 

@@ -10,6 +10,106 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ui import client  # noqa: E402
 
 st.set_page_config(page_title="Analyse de sentiment")
+
+st.markdown(
+    """
+    <style>
+    html, body, [class*="css"] {
+        font-family: Georgia, "Times New Roman", serif;
+        color: #20262e;
+    }
+    .stApp {
+        background: #ffffff;
+    }
+    section[data-testid="stMain"] > div {
+        max-width: 1200px;
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+    }
+    h1 {
+        font-family: Georgia, "Times New Roman", serif !important;
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.55rem 0 !important;
+    }
+    .stCaptionContainer {
+        font-size: 0.95rem;
+        color: #6e76a0;
+        margin-bottom: 0.5rem;
+    }
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 0.8rem;
+        border-bottom: 1px solid #e3e4e8;
+    }
+    .stTabs [data-baseweb="tab"] {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.15rem;
+        padding-left: 0;
+        padding-right: 0;
+        height: 2.8rem;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #2464a0 !important;
+        border-bottom-color: #2464a0 !important;
+    }
+    label, .stTextArea label p, .stFileUploader label p {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1rem !important;
+    }
+    textarea, [data-testid="stFileUploaderDropzone"] {
+        font-family: Georgia, "Times New Roman", serif !important;
+        border-radius: 6px !important;
+        background: #ffffff !important;
+    }
+    .stTextArea textarea {
+        min-height: 58px;
+        font-size: 1rem !important;
+        border-color: #c4c7cf;
+    }
+    .stButton > button {
+        font-family: Georgia, "Times New Roman", serif;
+        color: #20262e;
+        background: #ffffff;
+        border: 1px solid #2464a0;
+        border-radius: 6px;
+        min-height: 38px;
+        padding-left: 0.8rem;
+        padding-right: 0.8rem;
+    }
+    .stButton > button:hover {
+        border-color: #2464a0;
+        color: #2464a0;
+        background: #f8fbfe;
+    }
+    [data-testid="stMetricLabel"] {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1rem;
+        color: #20262e;
+    }
+    [data-testid="stMetricValue"] {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2rem;
+        color: #20262e;
+    }
+    [data-testid="stDataFrame"] {
+        border: none;
+        font-family: Georgia, "Times New Roman", serif;
+    }
+    [data-testid="stFileUploaderDropzone"] {
+        min-height: 58px;
+    }
+    header[data-testid="stHeader"] {
+        height: 0;
+    }
+    #MainMenu, footer {
+        visibility: hidden;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("Analyse de sentiment des avis")
 
 session = client.creer_session()

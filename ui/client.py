@@ -10,7 +10,7 @@ API_URL = os.getenv("API_URL", "http://127.0.0.1:8000").rstrip("/")
 VERDICTS = {
     "POSITIVE": "Avis positif",
     "NEGATIVE": "Avis négatif",
-    "INDETERMINE": "Je ne sais pas : à faire vérifier par un humain",
+    "INDETERMINE": "Je ne sais pas",
 }
 REFUS = "Texte refusé : vide, fait d'espaces, ou de plus de 2000 caractères"
 SANS_MODELE = "Modèle non chargé"
@@ -44,7 +44,7 @@ def sante(session: httpx.Client) -> Reponse:
         return Reponse(ok=True, message=str(corps.get("model", "modèle inconnu")))
     if reponse.status_code == 503:
         return Reponse(ok=False, message=SANS_MODELE)
-    return Reponse(ok=False, message=f"{ERREUR_API} (code {reponse.status_code})")
+    return Reponse(ok=False, message=ERREUR_API)
 
 
 def predire(session: httpx.Client, texte: str) -> Reponse:
@@ -65,7 +65,7 @@ def predire(session: httpx.Client, texte: str) -> Reponse:
         return Reponse(ok=False, message=REFUS)
     if reponse.status_code == 503:
         return Reponse(ok=False, message=SANS_MODELE)
-    return Reponse(ok=False, message=f"{ERREUR_API} (code {reponse.status_code})")
+    return Reponse(ok=False, message=ERREUR_API)
 
 
 def predire_lot(session: httpx.Client, textes: list[str]) -> list[Reponse]:
