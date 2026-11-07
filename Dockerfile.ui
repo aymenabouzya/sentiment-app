@@ -2,7 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir streamlit==1.39.* requests==2.32.*
+RUN pip install --no-cache-dir streamlit==1.39.* httpx==0.27.* pandas==2.2.*
 
 COPY ui ./ui
 

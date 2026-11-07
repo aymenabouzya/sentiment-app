@@ -1,40 +1,42 @@
 # Semaine 5 : interface Streamlit et intégration
 
-## Interface
+## Architecture
 
-L'application se trouve dans `ui/app.py`. Elle permet :
+- `ui/app.py` affiche uniquement la page et orchestre les composants Streamlit.
+- `ui/client.py` encapsule toute la communication HTTP avec `httpx` et traduit les codes de réponse.
+- L'API FastAPI reste responsable du chargement du modèle et du calcul du verdict.
 
-- de saisir un avis de moins de 2000 caractères ;
-- de vérifier la disponibilité de l'API ;
-- de lancer une prédiction ;
-- d'afficher POSITIVE, NEGATIVE ou INDETERMINE avec le score ;
-- de conserver l'historique de la session.
+## Pourquoi l'interface n'importe-t-elle jamais le modèle ?
 
-## Configuration
+L'interface doit pouvoir être remplacée ou déployée séparément sans connaître scikit-learn, les fichiers `.joblib` ou la logique du TP2. Elle reçoit uniquement un verdict et un score depuis l'API. Cette séparation évite les doubles chargements, rend les tests reproductibles avec `TestClient`, et permet de déployer l'API et Streamlit sur des ports ou des machines différents.
 
-L'adresse par défaut est `http://127.0.0.1:8000`. Elle peut être remplacée par la variable `API_URL` ou depuis la barre latérale.
+## Que montre-t-elle quand le modèle hésite ?
+
+Pour une confiance sous le seuil d'abstention de 0,60, l'API renvoie `INDETERMINE`. Streamlit affiche « Je ne sais pas » avec la confiance et un encadré indiquant qu'un humain doit trancher. Cette abstention est préférable à un verdict forcé : elle évite de présenter une prédiction fragile comme une certitude.
+
+## Que voit l'utilisateur quand l'API tombe ?
+
+Le client tente `/health` à chaque exécution. Si la connexion échoue, Streamlit affiche « API injoignable : lancez d’abord uvicorn api.main:app ». Pour un modèle absent, il affiche « Modèle non chargé ». Les erreurs HTTP sont aussi traduites en avertissement ou message lisible, sans exposer de détails techniques sur la page.
 
 ## Lancement local
 
 ```powershell
-# Terminal 1
-.venv\Scripts\Activate.ps1
 uvicorn api.main:app --reload
-
-# Terminal 2
-.venv\Scripts\Activate.ps1
 streamlit run ui/app.py
 ```
 
-## Lancement Docker
+La page est accessible sur http://localhost:8501 et l'API sur http://127.0.0.1:8000.
+
+## Test du lot
+
+Le fichier `data/avis_exemple.csv` contient six avis. Le lot attendu est résumé ainsi : `{'INDETERMINE': 1, 'NEGATIVE': 2, 'POSITIVE': 3}`. Le tableau affiché peut être téléchargé sous le nom `resultats.csv`.
+
+## Validation
 
 ```powershell
-docker compose up --build
+python src/make_demo.py
+python src/train.py
+python -m pytest -q
+ruff check .
+mypy api
 ```
-
-- API : http://localhost:8000/docs
-- Interface : http://localhost:8501
-
-## Tests
-
-L'interface possède des tests unitaires pour la construction de l'URL, le contrôle de santé et l'appel de prédiction.

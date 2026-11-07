@@ -1,7 +1,7 @@
 name: CI
 on: [push, pull_request]
 jobs:
-  tp4:
+  tp5:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -12,11 +12,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt -r requirements-dev.txt
-      - name: Entraîner le modèle de démonstration
-        run: python src/make_demo.py && python src/train.py
+      - name: Entraîner le modèle et lancer les tests
+        run: |
+          python src/make_demo.py
+          python src/train.py
+          pytest -q
       - name: Ruff
         run: ruff check .
       - name: Mypy
         run: mypy api
-      - name: Pytest avec couverture
+      - name: Couverture API
         run: pytest -q --cov=api --cov-report=term-missing --cov-fail-under=95
