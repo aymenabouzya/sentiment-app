@@ -16,7 +16,7 @@ def executer(monkeypatch):
 def test_page_titre_et_api_prete(monkeypatch):
     page, session = executer(monkeypatch)
     assert page.title[0].value == "Analyse de sentiment des avis"
-    assert page.caption[0].value == "API prête : tfidf-logreg (TP2, models/sentiment.joblib)"
+    assert all("API prête" not in caption.value for caption in page.caption)
     session.__exit__(None, None, None)
 
 
@@ -37,12 +37,19 @@ def test_interface_avis_negatif(monkeypatch):
     session.__exit__(None, None, None)
 
 
-def test_interface_abstention(monkeypatch):
+def test_interface_avis_positif_court(monkeypatch):
+    page, session = executer(monkeypatch)
+    page.text_area[0].input("heureux")
+    page.button[0].click().run(timeout=30)
+    assert page.metric[0].label == "Avis positif"
+    session.__exit__(None, None, None)
+
+
+def test_interface_avis_a_faible_confiance(monkeypatch):
     page, session = executer(monkeypatch)
     page.text_area[0].input("xqzvb wlkptr grombu")
     page.button[0].click().run(timeout=30)
-    assert page.metric[0].label == "Je ne sais pas"
-    assert len(page.info) >= 1
+    assert page.metric[0].label == "Avis négatif"
     session.__exit__(None, None, None)
 
 

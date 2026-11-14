@@ -10,9 +10,9 @@
 
 L'interface doit pouvoir être remplacée ou déployée séparément sans connaître scikit-learn, les fichiers `.joblib` ou la logique du TP2. Elle reçoit uniquement un verdict et un score depuis l'API. Cette séparation évite les doubles chargements, rend les tests reproductibles avec `TestClient`, et permet de déployer l'API et Streamlit sur des ports ou des machines différents.
 
-## Que montre-t-elle quand le modèle hésite ?
+## Quel verdict est affiché ?
 
-Pour une confiance sous le seuil d'abstention de 0,60, l'API renvoie `INDETERMINE`. Streamlit affiche « Je ne sais pas » avec la confiance et un encadré indiquant qu'un humain doit trancher. Cette abstention est préférable à un verdict forcé : elle évite de présenter une prédiction fragile comme une certitude.
+L'API renvoie toujours le verdict prédit par le modèle : `POSITIVE` ou `NEGATIVE`. Streamlit affiche ce verdict avec le score de confiance. Un score faible signale une prédiction incertaine, même si un des deux verdicts est affiché.
 
 ## Que voit l'utilisateur quand l'API tombe ?
 
@@ -29,7 +29,7 @@ La page est accessible sur http://localhost:8501 et l'API sur http://127.0.0.1:8
 
 ## Test du lot
 
-Le fichier `data/avis_exemple.csv` contient six avis. Le lot attendu est résumé ainsi : `{'INDETERMINE': 1, 'NEGATIVE': 2, 'POSITIVE': 3}`. Le tableau affiché peut être téléchargé sous le nom `resultats.csv`.
+Le fichier `data/avis_exemple.csv` contient six avis. Le lot attendu est résumé ainsi : `{'NEGATIVE': 3, 'POSITIVE': 3}`. Le tableau affiché peut être téléchargé sous le nom `resultats.csv`.
 
 ## Validation
 

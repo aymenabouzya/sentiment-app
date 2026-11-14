@@ -1,7 +1,7 @@
 {
   "source": "demo",
-  "date": "2026-11-07",
-  "n_train": 232,
+  "date": "2026-11-14",
+  "n_train": 250,
   "n_test": 58,
   "f1_macro": 0.879,
   "accuracy": 0.8793,

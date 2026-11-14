@@ -19,8 +19,8 @@ class PredictRequest(BaseModel):
 
 class PredictResponse(BaseModel):
     """Réponse de prédiction."""
-    label: Literal["POSITIVE", "NEGATIVE", "INDETERMINE"] = Field(
-        ..., description="POSITIVE, NEGATIVE ou INDETERMINE"
+    label: Literal["POSITIVE", "NEGATIVE"] = Field(
+        ..., description="POSITIVE ou NEGATIVE"
     )
     score: float = Field(..., ge=0, le=1, description="Confiance de la classe prédite")
     text: str = Field(..., description="Aperçu du texte analysé (100 caractères)")

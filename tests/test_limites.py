@@ -62,7 +62,7 @@ def test_propriete_textes_valides(client, texte):
     reponse = client.post("/predict", json={"text": texte})
     assert reponse.status_code == 200
     body = reponse.json()
-    assert body["label"] in {"POSITIVE", "NEGATIVE", "INDETERMINE"}
+    assert body["label"] in {"POSITIVE", "NEGATIVE"}
     assert 0.0 <= body["score"] <= 1.0
 
 

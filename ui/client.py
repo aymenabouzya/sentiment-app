@@ -10,7 +10,6 @@ API_URL = os.getenv("API_URL", "http://127.0.0.1:8000").rstrip("/")
 VERDICTS = {
     "POSITIVE": "Avis positif",
     "NEGATIVE": "Avis négatif",
-    "INDETERMINE": "Je ne sais pas",
 }
 REFUS = "Texte refusé : vide, fait d'espaces, ou de plus de 2000 caractères"
 SANS_MODELE = "Modèle non chargé"
@@ -74,9 +73,8 @@ def predire_lot(session: httpx.Client, textes: list[str]) -> list[Reponse]:
 
 
 def resumer(reponses: list[Reponse]) -> dict[str, int]:
-    """Compte uniquement les verdicts positifs, négatifs ou indéterminés."""
+    """Compte les verdicts positifs et négatifs."""
     comptes: Counter[str] = Counter(r.label for r in reponses if r.ok and r.label in VERDICTS)
     return {
-        label: comptes[label]
-        for label in ("INDETERMINE", "NEGATIVE", "POSITIVE")
+        label: comptes[label] for label in ("NEGATIVE", "POSITIVE")
     }

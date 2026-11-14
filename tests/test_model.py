@@ -48,6 +48,8 @@ def test_f1_au_dessus_du_seuil():
 def test_prediction_evidente(predicteur):
     assert predicteur("Service impeccable, livraison rapide, je recommande")["label"] == "positive"
     assert predicteur("Produit cassé et service client injoignable")["label"] == "negative"
+    assert predicteur("heureux")["label"] == "positive"
+    assert predicteur("triste")["label"] == "negative"
 
 
 def test_format_de_sortie(predicteur):

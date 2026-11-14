@@ -12,8 +12,7 @@ sys.path.insert(0, str(RACINE / "src"))
 from predict import charger_modele  # noqa: E402  (fonctions du TP2)
 from predict import predict as _predict  # noqa: E402
 
-SEUIL_ABSTENTION = 0.60
-SentimentLabel = Literal["POSITIVE", "NEGATIVE", "INDETERMINE"]
+SentimentLabel = Literal["POSITIVE", "NEGATIVE"]
 
 
 class SentimentPrediction(TypedDict):
@@ -34,14 +33,9 @@ class SentimentClassifier:
             raise RuntimeError(f"Classes inattendues du modèle : {sorted(classes)}")
 
     def predict(self, text: str) -> SentimentPrediction:
-        """Renvoie une étiquette du contrat ou INDETERMINE sous le seuil."""
+        """Renvoie le sentiment prédit et son score de confiance."""
         result = _predict(text)
-        if result["score"] < SEUIL_ABSTENTION:
-            label: SentimentLabel = "INDETERMINE"
-        elif result["label"] == "positive":
-            label = "POSITIVE"
-        else:
-            label = "NEGATIVE"
+        label: SentimentLabel = "POSITIVE" if result["label"] == "positive" else "NEGATIVE"
         return {"label": label, "score": result["score"], "text": text[:100]}
 
 

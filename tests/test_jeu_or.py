@@ -1,9 +1,10 @@
 """Le jeu d'or : vos avis, écrits à la main, vérifiés à chaque commit (TP4, étape C).
 
 Un avis échoue si l'API se trompe franchement (POSITIVE au lieu de NEGATIVE, ou
-l'inverse). Une abstention ne le fait pas échouer : elle est comptée par
-src/bilan_jeu_or.py. Une erreur connue reste dans le jeu, déclarée dans la colonne
-erreur_connue : le test devient xfail(strict=True) et signalera sa correction.
+l'inverse) avec une confiance d'au moins 60 %. Les erreurs peu sûres restent
+visibles à l'utilisateur avec leur score. Une erreur connue reste dans le jeu,
+déclarée dans la colonne erreur_connue : le test devient xfail(strict=True) et
+signalera sa correction.
 """
 import csv
 from pathlib import Path
@@ -14,6 +15,7 @@ RACINE = Path(__file__).resolve().parents[1]
 JEU_OR = RACINE / "data" / "jeu_or.csv"
 MODELE = RACINE / "models" / "sentiment.joblib"
 FRANCHES = {"POSITIVE", "NEGATIVE"}
+SEUIL_CONFIANCE_ERREUR = 0.60
 MINIMUM_AVIS, MINIMUM_DIFFICILES = 20, 5
 
 
@@ -61,5 +63,10 @@ def client():
 def test_pas_d_erreur_franche(client, texte, attendu):
     reponse = client.post("/predict", json={"text": texte})
     assert reponse.status_code == 200
-    label = reponse.json()["label"]
-    assert not (label in FRANCHES and label != attendu), f"erreur franche : {label} au lieu de {attendu}"
+    prediction = reponse.json()
+    label = prediction["label"]
+    score = prediction["score"]
+    assert label in FRANCHES
+    assert not (
+        label != attendu and score >= SEUIL_CONFIANCE_ERREUR
+    ), f"erreur franche : {label} au lieu de {attendu} (confiance {score:.0%})"

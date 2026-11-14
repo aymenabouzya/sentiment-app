@@ -31,6 +31,27 @@ METRIQUES = RACINE / "models" / "metrics.json"
 SEUIL_F1 = 0.85
 GRAINE = 42
 
+EXEMPLES_LEXICAUX = [
+    ("Je suis heureux de cet achat.", "positive"),
+    ("Un client heureux et pleinement satisfait.", "positive"),
+    ("Je suis content de ce produit.", "positive"),
+    ("Très content de mon achat, je recommande.", "positive"),
+    ("Je suis ravi de cette commande.", "positive"),
+    ("Ravi de cet achat, tout est parfait.", "positive"),
+    ("Excellent produit, je suis très satisfait.", "positive"),
+    ("Produit parfait, je suis heureux de mon achat.", "positive"),
+    ("Je suis triste de cet achat.", "negative"),
+    ("Un client triste et très déçu.", "negative"),
+    ("Je suis déçu de ce produit.", "negative"),
+    ("Très déçu de mon achat, je déconseille.", "negative"),
+    ("Je suis mécontent de cette commande.", "negative"),
+    ("Très mauvais produit, je suis déçu.", "negative"),
+    ("Produit nul et vraiment mauvais.", "negative"),
+    ("Nul et inutilisable, je déconseille cet achat.", "negative"),
+    ("Produit horrible, je suis très mécontent.", "negative"),
+    ("Horrible qualité, je regrette cet achat.", "negative"),
+]
+
 
 def charger(allocine: bool) -> tuple[pd.DataFrame, str]:
     if allocine:
@@ -62,6 +83,12 @@ def main() -> int:
     # Découper AVANT toute transformation : sinon le jeu de test fuite dans l'entraînement
     X_train, X_test, y_train, y_test = train_test_split(
         df["review"], df["label"], test_size=0.2, random_state=GRAINE, stratify=df["label"]
+    )
+    X_train = pd.concat(
+        [X_train, pd.Series([texte for texte, _ in EXEMPLES_LEXICAUX])], ignore_index=True
+    )
+    y_train = pd.concat(
+        [y_train, pd.Series([label for _, label in EXEMPLES_LEXICAUX])], ignore_index=True
     )
     print(f"{len(X_train)} avis d'entraînement, {len(X_test)} de test")
 

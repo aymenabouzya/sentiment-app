@@ -34,11 +34,19 @@ def test_predire_negatif():
     assert reponse.label == "NEGATIVE"
 
 
-def test_predire_abstention():
+def test_predire_avis_positif_court():
+    with TestClient(app) as session:
+        reponse = client.predire(session, "heureux")
+    assert reponse.ok
+    assert reponse.label == "POSITIVE"
+
+
+def test_predire_avis_a_faible_confiance():
     with TestClient(app) as session:
         reponse = client.predire(session, "xqzvb wlkptr grombu")
     assert reponse.ok
-    assert reponse.label == "INDETERMINE"
+    assert reponse.label == "NEGATIVE"
+    assert reponse.score < 0.60
 
 
 def test_predire_texte_refuse():
@@ -53,4 +61,4 @@ def test_predire_lot_et_resumer():
     with TestClient(app) as session:
         reponses = client.predire_lot(session, textes)
     resume = client.resumer(reponses)
-    assert resume == {"INDETERMINE": 1, "NEGATIVE": 2, "POSITIVE": 3}
+    assert resume == {"NEGATIVE": 3, "POSITIVE": 3}
