@@ -1,0 +1,32 @@
+sentiment-app 1.0.0
+===================
+
+Analyser un avis en français
+----------------------------
+
+Ouvrez un nouveau terminal et exécutez :
+
+  sentiment "Livraison rapide, très satisfait"
+
+Le résultat indique le sentiment prédit et le score de confiance.
+Pour obtenir une sortie JSON :
+
+  sentiment --json "Colis abîmé, service client injoignable"
+
+Pour afficher l'aide :
+
+  sentiment --help
+
+Limites
+-------
+
+Le modèle est entraîné sur un jeu de démonstration de taille limitée. Il peut
+mal interpréter l'ironie, les négations complexes, les avis mitigés et les
+domaines absents de ses données. Le score est une estimation, pas une garantie.
+
+Désinstallation
+---------------
+
+Désinstallez sentiment-app depuis Paramètres > Applications. Si l'application
+a été ajoutée au PATH de votre utilisateur, son entrée sera retirée lors de la
+désinstallation.

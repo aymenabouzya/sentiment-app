@@ -36,5 +36,7 @@ htmlcov/
 .ruff_cache/
 src/sentiment_app/modele/*.joblib
 docs/livrable-tp4.txt
+installateur/build/
+installateur/Output/
 !data/jeu_or.csv
 !data/avis_exemple.csv
